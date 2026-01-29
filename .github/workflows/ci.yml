@@ -23,14 +23,20 @@ jobs:
       - name: Install MAUI workloads
         run: dotnet workload install maui
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Restore (Windows target)
+        run: dotnet restore ControlRoom.App/ControlRoom.App.csproj -p:TargetFramework=net10.0-windows10.0.19041.0
 
       - name: Build Windows
-        run: dotnet build ControlRoom.App/ControlRoom.App.csproj --no-restore --configuration Release --framework net10.0-windows10.0.19041.0
+        run: dotnet build ControlRoom.App/ControlRoom.App.csproj --configuration Release -p:TargetFramework=net10.0-windows10.0.19041.0
+
+      - name: Build Domain/Infrastructure/Application
+        run: |
+          dotnet build ControlRoom.Domain/ControlRoom.Domain.csproj --configuration Release
+          dotnet build ControlRoom.Infrastructure/ControlRoom.Infrastructure.csproj --configuration Release
+          dotnet build ControlRoom.Application/ControlRoom.Application.csproj --configuration Release
 
       - name: Test
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        run: dotnet test --configuration Release --verbosity normal
         continue-on-error: true  # Tests may not exist yet
 
   lint:
@@ -49,9 +55,12 @@ jobs:
       - name: Install MAUI workloads
         run: dotnet workload install maui
 
-      - name: Restore
-        run: dotnet restore
+      - name: Restore (non-App projects)
+        run: |
+          dotnet restore ControlRoom.Domain/ControlRoom.Domain.csproj
+          dotnet restore ControlRoom.Infrastructure/ControlRoom.Infrastructure.csproj
+          dotnet restore ControlRoom.Application/ControlRoom.Application.csproj
 
       - name: Format check
-        run: dotnet format --verify-no-changes --verbosity diagnostic
+        run: dotnet format ControlRoom.sln --verify-no-changes --verbosity diagnostic --exclude ControlRoom.App
         continue-on-error: true  # Advisory for now

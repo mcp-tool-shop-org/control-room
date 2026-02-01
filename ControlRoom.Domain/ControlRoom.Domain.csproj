@@ -4,6 +4,15 @@
     <TargetFrameworks>net10.0;net10.0-windows10.0.19041.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- Package metadata -->
+    <Description>Domain models for Control Room - script definitions, execution records, failure fingerprints, and run profiles.</Description>
+    <Authors>mcp-tool-shop</Authors>
+    <Company>MCP Tool Shop</Company>
+    <Copyright>Copyright (c) 2025-2026 MCP Tool Shop</Copyright>
+    <PackageProjectUrl>https://github.com/mcp-tool-shop-org/control-room</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mcp-tool-shop-org/control-room</RepositoryUrl>
+    <PackageTags>domain;scripts;automation;ddd</PackageTags>
   </PropertyGroup>
 
 </Project>

@@ -18,6 +18,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
+		<!-- Package metadata -->
+		<Description>Control Room Desktop Application - Local-first script execution and task management with evidence-grade observability, failure fingerprinting, and command palette.</Description>
+		<Authors>mcp-tool-shop</Authors>
+		<Company>MCP Tool Shop</Company>
+		<Copyright>Copyright (c) 2025-2026 MCP Tool Shop</Copyright>
+		<PackageProjectUrl>https://github.com/mcp-tool-shop-org/control-room</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/mcp-tool-shop-org/control-room</RepositoryUrl>
+		<PackageTags>maui;desktop;scripts;automation;observability</PackageTags>
+
 		<!-- Display name -->
 		<ApplicationTitle>Control Room</ApplicationTitle>
 

@@ -65,6 +65,7 @@ public static class MauiProgram
         builder.Services.AddTransient<FailuresViewModel>();
         builder.Services.AddTransient<RunbooksViewModel>();
         builder.Services.AddTransient<RunbookDesignerViewModel>();
+        builder.Services.AddTransient<DashboardViewModel>();
 
         // Command Palette (singleton so state persists across opens)
         builder.Services.AddSingleton<CommandPaletteViewModel>();
@@ -77,6 +78,7 @@ public static class MauiProgram
         builder.Services.AddTransient<FailuresPage>();
         builder.Services.AddTransient<RunbooksPage>();
         builder.Services.AddTransient<RunbookDesignerPage>();
+        builder.Services.AddTransient<DashboardPage>();
         builder.Services.AddSingleton<MainHostPage>();
 
 #if DEBUG

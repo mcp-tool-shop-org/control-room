@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ControlRoom.App.ViewModels"
+             x:Class="ControlRoom.App.Views.DashboardPage"
+             x:DataType="vm:DashboardViewModel"
+             Title="Dashboard"
+             BackgroundColor="{StaticResource PageBackground}">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <!-- Header with time range selector -->
+        <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,16">
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="Observability Dashboard"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"/>
+                <Label Text="{Binding LastUpdated, StringFormat='Updated: {0}'}"
+                       FontSize="12"
+                       TextColor="Gray"
+                       VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <!-- Time range buttons -->
+            <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                <Button Text="1H" Command="{Binding SetTimeRangeCommand}" CommandParameter="LastHour"
+                        Style="{StaticResource TimeRangeButton}"
+                        BackgroundColor="{Binding SelectedTimeRange, Converter={StaticResource TimeRangeToColorConverter}, ConverterParameter=LastHour}"/>
+                <Button Text="6H" Command="{Binding SetTimeRangeCommand}" CommandParameter="Last6Hours"
+                        Style="{StaticResource TimeRangeButton}"/>
+                <Button Text="24H" Command="{Binding SetTimeRangeCommand}" CommandParameter="Last24Hours"
+                        Style="{StaticResource TimeRangeButton}"/>
+                <Button Text="7D" Command="{Binding SetTimeRangeCommand}" CommandParameter="Last7Days"
+                        Style="{StaticResource TimeRangeButton}"/>
+                <Button Text="30D" Command="{Binding SetTimeRangeCommand}" CommandParameter="Last30Days"
+                        Style="{StaticResource TimeRangeButton}"/>
+            </HorizontalStackLayout>
+
+            <!-- Refresh controls -->
+            <HorizontalStackLayout Grid.Column="2" Spacing="8" Margin="16,0,0,0">
+                <Button Text="{Binding IsAutoRefreshEnabled, Converter={StaticResource BoolToAutoRefreshText}}"
+                        Command="{Binding ToggleAutoRefreshCommand}"
+                        BackgroundColor="{Binding IsAutoRefreshEnabled, Converter={StaticResource BoolToColor}, ConverterParameter='#4CAF50|#9E9E9E'}"
+                        TextColor="White"
+                        Padding="12,8"/>
+                <Button Text="⟳" Command="{Binding RefreshCommand}"
+                        FontSize="18"
+                        Padding="12,8"/>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <Grid RowDefinitions="Auto,Auto,*" RowSpacing="20">
+                <!-- Summary Cards Row -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
+                    <!-- Total Executions Card -->
+                    <Frame Style="{StaticResource DashboardCard}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Total Executions" FontSize="12" TextColor="Gray"/>
+                            <Label Text="{Binding TotalScriptsToday}" FontSize="32" FontAttributes="Bold"/>
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="✓" TextColor="#4CAF50"/>
+                                <Label Text="{Binding SuccessfulScriptsToday}" TextColor="#4CAF50"/>
+                                <Label Text="✗" TextColor="#F44336" Margin="8,0,0,0"/>
+                                <Label Text="{Binding FailedScriptsToday}" TextColor="#F44336"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Success Rate Card -->
+                    <Frame Style="{StaticResource DashboardCard}" Grid.Column="1">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Success Rate" FontSize="12" TextColor="Gray"/>
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding SuccessRate, StringFormat='{0}%'}"
+                                       FontSize="32" FontAttributes="Bold"
+                                       TextColor="{Binding SuccessRate, Converter={StaticResource SuccessRateToColor}}"/>
+                            </HorizontalStackLayout>
+                            <ProgressBar Progress="{Binding SuccessRate, Converter={StaticResource PercentToProgress}}"
+                                         ProgressColor="#4CAF50"
+                                         HeightRequest="6"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Avg Duration Card -->
+                    <Frame Style="{StaticResource DashboardCard}" Grid.Column="2">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Avg Duration" FontSize="12" TextColor="Gray"/>
+                            <HorizontalStackLayout VerticalOptions="Center">
+                                <Label Text="{Binding AvgDurationMs, StringFormat='{0:F0}'}"
+                                       FontSize="32" FontAttributes="Bold"/>
+                                <Label Text="ms" FontSize="14" TextColor="Gray" VerticalOptions="End" Margin="4,0,0,8"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Alerts Card -->
+                    <Frame Style="{StaticResource DashboardCard}" Grid.Column="3">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Active Alerts" FontSize="12" TextColor="Gray"/>
+                            <Label Text="{Binding ActiveAlerts}"
+                                   FontSize="32" FontAttributes="Bold"
+                                   TextColor="{Binding ActiveAlerts, Converter={StaticResource AlertCountToColor}}"/>
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="🟢" />
+                                <Label Text="{Binding HealthyChecks}" TextColor="#4CAF50"/>
+                                <Label Text="🔴" Margin="8,0,0,0"/>
+                                <Label Text="{Binding UnhealthyChecks}" TextColor="#F44336"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Charts Row -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="16" Grid.Row="1">
+                    <!-- Execution Trend Chart -->
+                    <Frame Style="{StaticResource DashboardCard}">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="Execution Trend" FontSize="14" FontAttributes="Bold"/>
+                            <CollectionView ItemsSource="{Binding ExecutionTrend}"
+                                            HeightRequest="200">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:TimeSeriesDataPoint">
+                                        <VerticalStackLayout WidthRequest="30" HeightRequest="180">
+                                            <BoxView BackgroundColor="#2196F3"
+                                                     HeightRequest="{Binding Value, Converter={StaticResource ValueToBarHeight}}"
+                                                     WidthRequest="20"
+                                                     VerticalOptions="End"
+                                                     CornerRadius="2"/>
+                                            <Label Text="{Binding TimeLabel}"
+                                                   FontSize="8"
+                                                   HorizontalTextAlignment="Center"/>
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Status Breakdown -->
+                    <Frame Style="{StaticResource DashboardCard}" Grid.Column="1">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="Status Breakdown" FontSize="14" FontAttributes="Bold"/>
+                            <CollectionView ItemsSource="{Binding StatusBreakdown}"
+                                            HeightRequest="200">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:StatusBreakdownItem">
+                                        <Grid ColumnDefinitions="100,*,Auto" Padding="0,8">
+                                            <Label Text="{Binding Status}" VerticalOptions="Center"/>
+                                            <ProgressBar Grid.Column="1"
+                                                         Progress="{Binding Count, Converter={StaticResource CountToProgress}}"
+                                                         ProgressColor="{Binding Color}"
+                                                         HeightRequest="20"/>
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding Count}"
+                                                   VerticalOptions="Center"
+                                                   Margin="8,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Bottom Row: Recent Activity + Alerts -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="16" Grid.Row="2">
+                    <!-- Recent Executions -->
+                    <Frame Style="{StaticResource DashboardCard}">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="Recent Executions" FontSize="14" FontAttributes="Bold"/>
+                            <CollectionView ItemsSource="{Binding RecentExecutions}"
+                                            SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:RecentExecutionItem">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="8" ColumnSpacing="12">
+                                            <BoxView BackgroundColor="{Binding StatusColor}"
+                                                     WidthRequest="4"
+                                                     CornerRadius="2"/>
+                                            <VerticalStackLayout Grid.Column="1">
+                                                <Label Text="{Binding ScriptName}" FontAttributes="Bold"/>
+                                                <Label Text="{Binding TimeAgo}" FontSize="11" TextColor="Gray"/>
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding DurationText}"
+                                                   FontSize="12"
+                                                   VerticalOptions="Center"
+                                                   TextColor="Gray"/>
+                                            <Label Grid.Column="3"
+                                                   Text="{Binding Status}"
+                                                   FontSize="11"
+                                                   VerticalOptions="Center"
+                                                   TextColor="{Binding StatusColor}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Active Alerts -->
+                    <Frame Style="{StaticResource DashboardCard}" Grid.Column="1">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="Active Alerts" FontSize="14" FontAttributes="Bold"/>
+                            <CollectionView ItemsSource="{Binding ActiveAlertsList}"
+                                            SelectionMode="None"
+                                            EmptyView="No active alerts">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:AlertViewModel">
+                                        <Frame Padding="12" Margin="0,4" BorderColor="{Binding SeverityColor}">
+                                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                                <Label Text="{Binding SeverityIcon}" FontSize="20" VerticalOptions="Center"/>
+                                                <VerticalStackLayout Grid.Column="1" Margin="8,0">
+                                                    <Label Text="{Binding RuleName}" FontAttributes="Bold"/>
+                                                    <Label Text="{Binding Message}" FontSize="12" TextColor="Gray"/>
+                                                </VerticalStackLayout>
+                                                <Button Grid.Column="2"
+                                                        Text="ACK"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DashboardViewModel}}, Path=AcknowledgeAlertCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        FontSize="10"
+                                                        Padding="8,4"/>
+                                                <Label Grid.Row="1" Grid.Column="1"
+                                                       Text="{Binding TimeAgo}"
+                                                       FontSize="10"
+                                                       TextColor="Gray"
+                                                       Margin="8,4,0,0"/>
+                                            </Grid>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+            </Grid>
+        </ScrollView>
+
+        <!-- Loading overlay -->
+        <Grid Grid.RowSpan="2"
+              IsVisible="{Binding IsRefreshing}"
+              BackgroundColor="#80000000">
+            <ActivityIndicator IsRunning="True"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Color="White"/>
+        </Grid>
+    </Grid>
+</ContentPage>

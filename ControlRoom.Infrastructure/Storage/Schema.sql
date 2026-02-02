@@ -267,3 +267,194 @@ CREATE TABLE IF NOT EXISTS self_healing_executions (
 
 CREATE INDEX IF NOT EXISTS idx_self_healing_executions_rule_id ON self_healing_executions(rule_id);
 CREATE INDEX IF NOT EXISTS idx_self_healing_executions_started_at ON self_healing_executions(started_at DESC);
+
+-- ============================================================================
+-- TEAM COLLABORATION (Phase 4)
+-- ============================================================================
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY,
+  username TEXT NOT NULL UNIQUE,
+  display_name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'User',
+  created_at TEXT NOT NULL,
+  last_login_at TEXT NULL,
+  preferences TEXT NOT NULL DEFAULT '{}'
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+-- Teams table
+CREATE TABLE IF NOT EXISTS teams (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NULL,
+  owner_id TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NULL,
+  settings TEXT NOT NULL DEFAULT '{}',
+  FOREIGN KEY (owner_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_teams_owner ON teams(owner_id);
+CREATE INDEX IF NOT EXISTS idx_teams_name ON teams(name);
+
+-- Team memberships
+CREATE TABLE IF NOT EXISTS team_memberships (
+  id TEXT PRIMARY KEY,
+  team_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'Member',
+  added_by TEXT NOT NULL,
+  joined_at TEXT NOT NULL,
+  FOREIGN KEY (team_id) REFERENCES teams(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (added_by) REFERENCES users(id),
+  UNIQUE(team_id, user_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_memberships_team ON team_memberships(team_id);
+CREATE INDEX IF NOT EXISTS idx_memberships_user ON team_memberships(user_id);
+
+-- Team invitations
+CREATE TABLE IF NOT EXISTS team_invitations (
+  id TEXT PRIMARY KEY,
+  team_id TEXT NOT NULL,
+  email TEXT NOT NULL,
+  invited_user_id TEXT NULL,
+  role TEXT NOT NULL DEFAULT 'Member',
+  invited_by TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'Pending',
+  FOREIGN KEY (team_id) REFERENCES teams(id),
+  FOREIGN KEY (invited_user_id) REFERENCES users(id),
+  FOREIGN KEY (invited_by) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_invitations_team ON team_invitations(team_id);
+CREATE INDEX IF NOT EXISTS idx_invitations_email ON team_invitations(email);
+CREATE INDEX IF NOT EXISTS idx_invitations_status ON team_invitations(status);
+
+-- Shared resources
+CREATE TABLE IF NOT EXISTS shared_resources (
+  id TEXT PRIMARY KEY,
+  resource_type TEXT NOT NULL,
+  resource_id TEXT NOT NULL,
+  owner_id TEXT NOT NULL,
+  shared_with_team_id TEXT NULL,
+  shared_with_user_id TEXT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY (owner_id) REFERENCES users(id),
+  FOREIGN KEY (shared_with_team_id) REFERENCES teams(id),
+  FOREIGN KEY (shared_with_user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_shared_resources_owner ON shared_resources(owner_id);
+CREATE INDEX IF NOT EXISTS idx_shared_resources_team ON shared_resources(shared_with_team_id);
+CREATE INDEX IF NOT EXISTS idx_shared_resources_user ON shared_resources(shared_with_user_id);
+CREATE INDEX IF NOT EXISTS idx_shared_resources_type ON shared_resources(resource_type, resource_id);
+
+-- Resource permissions
+CREATE TABLE IF NOT EXISTS resource_permissions (
+  shared_resource_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  permission_level TEXT NOT NULL,
+  granted_at TEXT NOT NULL,
+  granted_by TEXT NOT NULL,
+  PRIMARY KEY (shared_resource_id, user_id),
+  FOREIGN KEY (shared_resource_id) REFERENCES shared_resources(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (granted_by) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_permissions_user ON resource_permissions(user_id);
+
+-- Activity log (audit trail)
+CREATE TABLE IF NOT EXISTS activity_log (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  activity_type TEXT NOT NULL,
+  description TEXT NOT NULL,
+  team_id TEXT NULL,
+  resource_id TEXT NULL,
+  target_user_id TEXT NULL,
+  comment_id TEXT NULL,
+  occurred_at TEXT NOT NULL,
+  metadata TEXT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (team_id) REFERENCES teams(id),
+  FOREIGN KEY (target_user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_activity_user ON activity_log(user_id);
+CREATE INDEX IF NOT EXISTS idx_activity_team ON activity_log(team_id);
+CREATE INDEX IF NOT EXISTS idx_activity_occurred ON activity_log(occurred_at DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_type ON activity_log(activity_type);
+
+-- Comments on resources
+CREATE TABLE IF NOT EXISTS comments (
+  id TEXT PRIMARY KEY,
+  resource_id TEXT NOT NULL,
+  author_id TEXT NOT NULL,
+  content TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  edited_at TEXT NULL,
+  parent_id TEXT NULL,
+  mentions TEXT NOT NULL DEFAULT '[]',
+  reactions TEXT NOT NULL DEFAULT '{}',
+  FOREIGN KEY (resource_id) REFERENCES shared_resources(id),
+  FOREIGN KEY (author_id) REFERENCES users(id),
+  FOREIGN KEY (parent_id) REFERENCES comments(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_comments_resource ON comments(resource_id);
+CREATE INDEX IF NOT EXISTS idx_comments_author ON comments(author_id);
+CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent_id);
+CREATE INDEX IF NOT EXISTS idx_comments_created ON comments(created_at DESC);
+
+-- Annotations (highlights, bookmarks, etc.)
+CREATE TABLE IF NOT EXISTS annotations (
+  id TEXT PRIMARY KEY,
+  resource_id TEXT NOT NULL,
+  author_id TEXT NOT NULL,
+  annotation_type TEXT NOT NULL,
+  content TEXT NOT NULL,
+  start_position INTEGER NOT NULL,
+  length INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NULL,
+  color TEXT NULL,
+  metadata TEXT NULL,
+  FOREIGN KEY (resource_id) REFERENCES shared_resources(id),
+  FOREIGN KEY (author_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_annotations_resource ON annotations(resource_id);
+CREATE INDEX IF NOT EXISTS idx_annotations_author ON annotations(author_id);
+CREATE INDEX IF NOT EXISTS idx_annotations_type ON annotations(annotation_type);
+
+-- Notifications
+CREATE TABLE IF NOT EXISTS notifications (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  notification_type TEXT NOT NULL,
+  message TEXT NOT NULL,
+  is_read INTEGER NOT NULL DEFAULT 0,
+  team_id TEXT NULL,
+  resource_id TEXT NULL,
+  comment_id TEXT NULL,
+  created_at TEXT NOT NULL,
+  read_at TEXT NULL,
+  metadata TEXT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (team_id) REFERENCES teams(id),
+  FOREIGN KEY (comment_id) REFERENCES comments(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_unread ON notifications(user_id, is_read);
+CREATE INDEX IF NOT EXISTS idx_notifications_created ON notifications(created_at DESC);

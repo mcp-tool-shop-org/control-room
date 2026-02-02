@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ControlRoom.App.Views.RunbooksPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:ControlRoom.App.ViewModels"
+    xmlns:queries="clr-namespace:ControlRoom.Infrastructure.Storage.Queries;assembly=ControlRoom.Infrastructure"
+    x:DataType="vm:RunbooksViewModel"
+    Title="Runbooks">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16">
+        <!-- Header -->
+        <HorizontalStackLayout Spacing="12">
+            <Button Text="Refresh" Command="{Binding RefreshCommand}" />
+            <Button Text="+ New Runbook" Command="{Binding NewRunbookCommand}" BackgroundColor="#4CAF50" TextColor="White" />
+        </HorizontalStackLayout>
+
+        <!-- Empty State -->
+        <VerticalStackLayout
+            Grid.Row="1"
+            IsVisible="{Binding HasRunbooks, Converter={StaticResource InvertedBool}}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Spacing="12">
+            <Label Text="No Runbooks yet" FontSize="20" HorizontalOptions="Center" />
+            <Label Text="Runbooks orchestrate multiple scripts in a workflow" Opacity="0.6" HorizontalOptions="Center" />
+            <Label Text="Build, test, deploy - all in sequence or parallel" Opacity="0.6" HorizontalOptions="Center" />
+            <Button Text="+ Create Your First Runbook" Command="{Binding NewRunbookCommand}" BackgroundColor="#4CAF50" TextColor="White" />
+        </VerticalStackLayout>
+
+        <!-- Runbooks List -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Runbooks}" IsVisible="{Binding HasRunbooks}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:RunbookListItemViewModel">
+                    <Border Padding="12" Margin="0,4" StrokeShape="RoundRectangle 8">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" RowDefinitions="Auto,Auto">
+                            <!-- Status Indicator -->
+                            <BoxView
+                                WidthRequest="8" HeightRequest="8"
+                                CornerRadius="4"
+                                Color="{Binding StatusColor}"
+                                VerticalOptions="Center"
+                                Margin="0,0,8,0" />
+
+                            <!-- Name and Description -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <Label Text="{Binding StepCountText}" FontSize="12" Opacity="0.6" />
+                                    <Label Text="|" FontSize="12" Opacity="0.4" />
+                                    <Label Text="{Binding TriggerDisplay}" FontSize="12" Opacity="0.6" />
+                                    <Label Text="|" FontSize="12" Opacity="0.4" />
+                                    <Label Text="{Binding LastUpdatedText}" FontSize="12" Opacity="0.6" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <!-- Toggle Enable -->
+                            <Switch
+                                Grid.Column="2"
+                                IsToggled="{Binding IsEnabled}"
+                                VerticalOptions="Center" />
+
+                            <!-- Edit Button -->
+                            <Button
+                                Grid.Column="3"
+                                Text="Edit"
+                                FontSize="12"
+                                Padding="8,4"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RunbooksViewModel}}, Path=EditRunbookCommand}"
+                                CommandParameter="{Binding .}"
+                                VerticalOptions="Center" />
+
+                            <!-- Run Button -->
+                            <Button
+                                Grid.Column="4"
+                                Text="Run"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                IsEnabled="{Binding IsEnabled}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RunbooksViewModel}}, Path=ExecuteRunbookCommand}"
+                                CommandParameter="{Binding .}"
+                                VerticalOptions="Center" />
+
+                            <!-- Description Row -->
+                            <Label
+                                Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
+                                Text="{Binding Description}"
+                                FontSize="12" Opacity="0.7"
+                                MaxLines="2"
+                                IsVisible="{Binding Description, Converter={StaticResource StringToBool}}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Recent Executions -->
+        <Border Grid.Row="2" Padding="12" Margin="0,12,0,0" StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding RecentExecutions.Count, Converter={StaticResource IntToBool}}">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Recent Executions" FontSize="14" FontAttributes="Bold" />
+                <CollectionView ItemsSource="{Binding RecentExecutions}" HeightRequest="150">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="queries:RunbookExecutionListItem">
+                            <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="8,4">
+                                <!-- Status Icon -->
+                                <Label
+                                    Text="{Binding Status, Converter={StaticResource StatusToColor}}"
+                                    FontSize="16"
+                                    VerticalOptions="Center" />
+
+                                <!-- Runbook Name -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="8,0">
+                                    <Label Text="{Binding RunbookName}" FontSize="14" />
+                                    <Label Text="{Binding StartedAt, StringFormat='{0:g}'}" FontSize="11" Opacity="0.6" />
+                                </VerticalStackLayout>
+
+                                <!-- Progress -->
+                                <Label
+                                    Grid.Column="2"
+                                    Text="{Binding CompletedSteps, StringFormat='{0} done'}"
+                                    FontSize="12" Opacity="0.6"
+                                    VerticalOptions="Center" />
+
+                                <!-- View Button -->
+                                <Button
+                                    Grid.Column="3"
+                                    Text="View"
+                                    FontSize="11"
+                                    Padding="6,2"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RunbooksViewModel}}, Path=ViewExecutionCommand}"
+                                    CommandParameter="{Binding .}"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

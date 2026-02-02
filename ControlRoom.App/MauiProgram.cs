@@ -44,12 +44,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<RunQueries>();
         builder.Services.AddSingleton<ThingQueries>();
         builder.Services.AddSingleton<ArtifactQueries>();
+        builder.Services.AddSingleton<RunbookQueries>();
 
         // Settings
         builder.Services.AddSingleton<AppSettings>();
 
         // Use Cases
         builder.Services.AddSingleton<RunLocalScript>();
+        builder.Services.AddSingleton<IRunbookExecutor, RunbookExecutor>();
 
         // ViewModels
         builder.Services.AddTransient<TimelineViewModel>();
@@ -57,6 +59,8 @@ public static class MauiProgram
         builder.Services.AddTransient<RunDetailViewModel>();
         builder.Services.AddTransient<NewThingViewModel>();
         builder.Services.AddTransient<FailuresViewModel>();
+        builder.Services.AddTransient<RunbooksViewModel>();
+        builder.Services.AddTransient<RunbookDesignerViewModel>();
 
         // Command Palette (singleton so state persists across opens)
         builder.Services.AddSingleton<CommandPaletteViewModel>();
@@ -67,6 +71,8 @@ public static class MauiProgram
         builder.Services.AddTransient<RunDetailPage>();
         builder.Services.AddTransient<NewThingPage>();
         builder.Services.AddTransient<FailuresPage>();
+        builder.Services.AddTransient<RunbooksPage>();
+        builder.Services.AddTransient<RunbookDesignerPage>();
         builder.Services.AddSingleton<MainHostPage>();
 
 #if DEBUG

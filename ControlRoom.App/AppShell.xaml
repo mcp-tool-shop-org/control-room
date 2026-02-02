@@ -15,4 +15,8 @@
         <ShellContent ContentTemplate="{DataTemplate views:ThingsPage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Runbooks" Route="runbooks">
+        <ShellContent ContentTemplate="{DataTemplate views:RunbooksPage}" />
+    </FlyoutItem>
+
 </Shell>

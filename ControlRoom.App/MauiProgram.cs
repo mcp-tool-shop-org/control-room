@@ -46,6 +46,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ThingQueries>();
         builder.Services.AddSingleton<ArtifactQueries>();
         builder.Services.AddSingleton<RunbookQueries>();
+        builder.Services.AddSingleton<MetricsQueries>();
 
         // Settings
         builder.Services.AddSingleton<AppSettings>();

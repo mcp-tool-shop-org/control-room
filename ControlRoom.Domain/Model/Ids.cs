@@ -17,3 +17,15 @@ public readonly record struct ArtifactId(Guid Value)
     public static ArtifactId New() => new(Guid.NewGuid());
     public override string ToString() => Value.ToString("D");
 }
+
+public readonly record struct RunbookId(Guid Value)
+{
+    public static RunbookId New() => new(Guid.NewGuid());
+    public override string ToString() => Value.ToString("D");
+}
+
+public readonly record struct RunbookExecutionId(Guid Value)
+{
+    public static RunbookExecutionId New() => new(Guid.NewGuid());
+    public override string ToString() => Value.ToString("D");
+}

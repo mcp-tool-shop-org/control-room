@@ -3,6 +3,7 @@ using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ControlRoom.Domain.Model;
+using ControlRoom.Domain.Services;
 using ControlRoom.Infrastructure.Storage.Queries;
 
 namespace ControlRoom.App.ViewModels;
@@ -10,10 +11,12 @@ namespace ControlRoom.App.ViewModels;
 public partial class NewThingViewModel : ObservableObject
 {
     private readonly ThingQueries _things;
+    private readonly IAIAssistant? _aiAssistant;
 
-    public NewThingViewModel(ThingQueries things)
+    public NewThingViewModel(ThingQueries things, IAIAssistant? aiAssistant = null)
     {
         _things = things;
+        _aiAssistant = aiAssistant;
 
         // Start with one default profile
         Profiles.Add(new ProfileEditorItem
@@ -24,6 +27,9 @@ public partial class NewThingViewModel : ObservableObject
             Env = "",
             WorkingDir = ""
         });
+
+        // Check AI availability
+        _ = CheckAIAvailabilityAsync();
     }
 
     [ObservableProperty]
@@ -44,7 +50,34 @@ public partial class NewThingViewModel : ObservableObject
     [ObservableProperty]
     private bool showProfiles;
 
+    [ObservableProperty]
+    private bool isAIAvailable;
+
+    [ObservableProperty]
+    private bool showAIGenerator;
+
+    [ObservableProperty]
+    private string aiPrompt = "";
+
+    [ObservableProperty]
+    private string selectedLanguage = "PowerShell";
+
+    [ObservableProperty]
+    private bool isGenerating;
+
+    [ObservableProperty]
+    private string generatedScript = "";
+
+    [ObservableProperty]
+    private string generatedDocumentation = "";
+
+    [ObservableProperty]
+    private bool hasGeneratedScript;
+
     public ObservableCollection<ProfileEditorItem> Profiles { get; } = [];
+    public ObservableCollection<string> GeneratedDependencies { get; } = [];
+
+    public string[] AvailableLanguages { get; } = ["PowerShell", "Python", "Bash", "Batch", "Node.js"];
 
     partial void OnNameChanged(string value) => UpdateCanSave();
     partial void OnScriptPathChanged(string value) => UpdateCanSave();
@@ -209,6 +242,151 @@ public partial class NewThingViewModel : ObservableObject
     private async Task CancelAsync()
     {
         await Shell.Current.GoToAsync("..");
+    }
+
+    [RelayCommand]
+    private void ToggleAIGenerator()
+    {
+        ShowAIGenerator = !ShowAIGenerator;
+    }
+
+    [RelayCommand]
+    private async Task GenerateScriptAsync()
+    {
+        if (_aiAssistant is null || string.IsNullOrWhiteSpace(AiPrompt) || IsGenerating)
+            return;
+
+        IsGenerating = true;
+        ErrorMessage = "";
+        GeneratedDependencies.Clear();
+
+        try
+        {
+            var language = SelectedLanguage switch
+            {
+                "PowerShell" => ScriptLanguage.PowerShell,
+                "Python" => ScriptLanguage.Python,
+                "Bash" => ScriptLanguage.Bash,
+                "Batch" => ScriptLanguage.Batch,
+                "Node.js" => ScriptLanguage.Node,
+                _ => ScriptLanguage.PowerShell
+            };
+
+            var result = await _aiAssistant.GenerateScriptAsync(AiPrompt, language);
+
+            GeneratedScript = result.Content;
+            GeneratedDocumentation = result.Documentation ?? "";
+            HasGeneratedScript = !string.IsNullOrWhiteSpace(result.Content);
+
+            foreach (var dep in result.RequiredDependencies)
+            {
+                GeneratedDependencies.Add(dep);
+            }
+
+            // Auto-fill name from the prompt if empty
+            if (string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(AiPrompt))
+            {
+                // Create a short name from the prompt
+                var words = AiPrompt.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(4);
+                Name = string.Join(" ", words);
+                if (Name.Length > 30) Name = Name[..30];
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Generation failed: {ex.Message}";
+        }
+        finally
+        {
+            IsGenerating = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task SaveGeneratedScriptAsync()
+    {
+        if (!HasGeneratedScript || string.IsNullOrWhiteSpace(GeneratedScript))
+            return;
+
+        try
+        {
+            // Determine file extension based on language
+            var extension = SelectedLanguage switch
+            {
+                "PowerShell" => ".ps1",
+                "Python" => ".py",
+                "Bash" => ".sh",
+                "Batch" => ".bat",
+                "Node.js" => ".js",
+                _ => ".ps1"
+            };
+
+            // Create filename from name or prompt
+            var baseName = string.IsNullOrWhiteSpace(Name)
+                ? "generated-script"
+                : SanitizeFilename(Name);
+
+            // Get scripts directory
+            var scriptsDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "ControlRoom",
+                "scripts");
+            Directory.CreateDirectory(scriptsDir);
+
+            var scriptPath = Path.Combine(scriptsDir, baseName + extension);
+
+            // Handle duplicates
+            var counter = 1;
+            while (File.Exists(scriptPath))
+            {
+                scriptPath = Path.Combine(scriptsDir, $"{baseName}-{counter}{extension}");
+                counter++;
+            }
+
+            // Write the script
+            await File.WriteAllTextAsync(scriptPath, GeneratedScript);
+
+            // Update the form fields
+            ScriptPath = scriptPath;
+            if (string.IsNullOrWhiteSpace(WorkingDirectory))
+            {
+                WorkingDirectory = scriptsDir;
+            }
+
+            // Hide AI generator panel
+            ShowAIGenerator = false;
+
+            ErrorMessage = "";
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Failed to save script: {ex.Message}";
+        }
+    }
+
+    private static string SanitizeFilename(string name)
+    {
+        var invalid = Path.GetInvalidFileNameChars();
+        var sanitized = new string(name.Select(c => invalid.Contains(c) ? '_' : c).ToArray());
+        return sanitized.Replace(' ', '-').ToLowerInvariant();
+    }
+
+    private async Task CheckAIAvailabilityAsync()
+    {
+        if (_aiAssistant is null)
+        {
+            IsAIAvailable = false;
+            return;
+        }
+
+        try
+        {
+            IsAIAvailable = await _aiAssistant.IsAvailableAsync();
+        }
+        catch
+        {
+            IsAIAvailable = false;
+        }
     }
 }
 

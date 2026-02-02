@@ -20,6 +20,7 @@
             <converters:BoolToExpandIconConverter x:Key="BoolToExpandIcon" />
             <converters:IntToBoolConverter x:Key="IntToBool" />
             <converters:SeverityToColorConverter x:Key="SeverityToColor" />
+            <converters:BoolToGenerateTextConverter x:Key="BoolToGenerateText" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

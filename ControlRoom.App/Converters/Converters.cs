@@ -149,3 +149,19 @@ public class SeverityToColorConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotImplementedException();
 }
+
+/// <summary>
+/// Converts IsGenerating bool to button text
+/// </summary>
+public class BoolToGenerateTextConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is bool isGenerating && isGenerating)
+            return "Generating...";
+        return "Generate Script";
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}

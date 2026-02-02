@@ -12,6 +12,117 @@
             <Label Text="Add a Local Script" FontSize="24" FontAttributes="Bold" />
             <Label Text="Point to a script file (.ps1, .py, .cmd, .bat, .sh) and give it a name" Opacity="0.7" />
 
+            <!-- AI Script Generator Toggle -->
+            <Border
+                Padding="12"
+                IsVisible="{Binding IsAIAvailable}"
+                BackgroundColor="{AppThemeBinding Light=#F0F4FF, Dark=#1E293B}"
+                StrokeShape="RoundRectangle 8"
+                Stroke="#6366F1">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Text="🤖" FontSize="20" VerticalOptions="Center" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" Padding="8,0">
+                            <Label Text="Generate with AI" FontSize="14" FontAttributes="Bold" />
+                            <Label Text="Describe what you want and let AI create the script" FontSize="12" Opacity="0.7" />
+                        </VerticalStackLayout>
+                        <Button
+                            Grid.Column="2"
+                            Text="{Binding ShowAIGenerator, Converter={StaticResource BoolToExpandIcon}}"
+                            FontSize="14"
+                            Padding="12,6"
+                            Command="{Binding ToggleAIGeneratorCommand}"
+                            BackgroundColor="#6366F1"
+                            TextColor="White" />
+                    </Grid>
+
+                    <!-- AI Generator Panel (collapsible) -->
+                    <VerticalStackLayout Spacing="12" IsVisible="{Binding ShowAIGenerator}">
+                        <!-- Language Selection -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Label Text="Language:" FontSize="14" VerticalOptions="Center" />
+                            <Picker
+                                Grid.Column="1"
+                                ItemsSource="{Binding AvailableLanguages}"
+                                SelectedItem="{Binding SelectedLanguage}"
+                                Title="Select Language" />
+                        </Grid>
+
+                        <!-- Prompt Input -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Describe what you want the script to do:" FontSize="14" FontAttributes="Bold" />
+                            <Editor
+                                Text="{Binding AiPrompt}"
+                                Placeholder="Example: A script that backs up all .docx files from Documents folder to a timestamped folder in OneDrive, with logging and error handling"
+                                HeightRequest="100"
+                                FontSize="13"
+                                AutoSize="TextChanges" />
+                        </VerticalStackLayout>
+
+                        <!-- Generate Button -->
+                        <Button
+                            Text="{Binding IsGenerating, Converter={StaticResource BoolToGenerateText}}"
+                            Command="{Binding GenerateScriptCommand}"
+                            IsEnabled="{Binding IsGenerating, Converter={StaticResource InvertedBool}}"
+                            BackgroundColor="#6366F1"
+                            TextColor="White"
+                            HorizontalOptions="Start"
+                            Padding="16,8" />
+
+                        <!-- Generated Script Preview -->
+                        <Border
+                            IsVisible="{Binding HasGeneratedScript}"
+                            Padding="12"
+                            BackgroundColor="#1E1E1E"
+                            StrokeShape="RoundRectangle 6">
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Generated Script:" FontSize="12" FontAttributes="Bold" TextColor="#E0E0E0" />
+                                <Label
+                                    Text="{Binding GeneratedScript}"
+                                    FontFamily="Consolas"
+                                    FontSize="11"
+                                    TextColor="#E0E0E0"
+                                    MaxLines="15"
+                                    LineBreakMode="TailTruncation" />
+
+                                <!-- Documentation -->
+                                <Label
+                                    Text="{Binding GeneratedDocumentation}"
+                                    FontSize="11"
+                                    Opacity="0.7"
+                                    IsVisible="{Binding GeneratedDocumentation, Converter={StaticResource StringToBool}}" />
+
+                                <!-- Dependencies -->
+                                <VerticalStackLayout IsVisible="{Binding GeneratedDependencies.Count, Converter={StaticResource IntToBool}}">
+                                    <Label Text="Dependencies:" FontSize="11" FontAttributes="Bold" />
+                                    <CollectionView ItemsSource="{Binding GeneratedDependencies}" HeightRequest="40">
+                                        <CollectionView.ItemsLayout>
+                                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                                        </CollectionView.ItemsLayout>
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate x:DataType="x:String">
+                                                <Border Padding="6,2" BackgroundColor="#333" StrokeShape="RoundRectangle 4">
+                                                    <Label Text="{Binding .}" FontSize="10" TextColor="#E0E0E0" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+
+                                <!-- Use This Script Button -->
+                                <Button
+                                    Text="Use This Script"
+                                    Command="{Binding SaveGeneratedScriptCommand}"
+                                    BackgroundColor="#22C55E"
+                                    TextColor="White"
+                                    HorizontalOptions="Start"
+                                    Padding="16,8" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
             <!-- Name -->
             <VerticalStackLayout Spacing="4">
                 <Label Text="Name" FontSize="14" FontAttributes="Bold" />

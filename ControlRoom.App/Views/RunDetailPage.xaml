@@ -43,6 +43,15 @@
                     IsVisible="{Binding IsFailed}"
                     IsEnabled="{Binding IsAIAnalyzing, Converter={StaticResource InvertedBool}}" />
                 <Button
+                    Text="📚 Docs"
+                    Command="{Binding GenerateDocsCommand}"
+                    FontSize="12"
+                    Padding="10,6"
+                    BackgroundColor="#059669"
+                    TextColor="White"
+                    IsVisible="{Binding IsRunning, Converter={StaticResource InvertedBool}}"
+                    IsEnabled="{Binding IsLoadingDocs, Converter={StaticResource InvertedBool}}" />
+                <Button
                     Text="📋 Copy"
                     Command="{Binding CopySummaryCommand}"
                     FontSize="12"
@@ -62,8 +71,8 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <!-- Main content - split into log, AI analysis, and artifacts -->
-        <Grid Grid.Row="1" Margin="0,12,0,0" RowDefinitions="*,Auto,Auto">
+        <!-- Main content - split into log, AI analysis, documentation, and artifacts -->
+        <Grid Grid.Row="1" Margin="0,12,0,0" RowDefinitions="*,Auto,Auto,Auto">
             <!-- Log Output -->
             <Border Padding="12" BackgroundColor="#1E1E1E" StrokeShape="RoundRectangle 8">
                 <CollectionView ItemsSource="{Binding Lines}">
@@ -165,9 +174,112 @@
                 </HorizontalStackLayout>
             </Border>
 
-            <!-- Artifacts Panel -->
+            <!-- Documentation Panel -->
             <Border
                 Grid.Row="2"
+                Margin="0,12,0,0"
+                Padding="16"
+                IsVisible="{Binding HasDocumentation}"
+                BackgroundColor="{AppThemeBinding Light=#F0FDF4, Dark=#14532D}"
+                StrokeShape="RoundRectangle 8"
+                Stroke="#059669">
+                <VerticalStackLayout Spacing="12">
+                    <!-- Header -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="📚" FontSize="18" VerticalOptions="Center" />
+                        <Label Text="{Binding DocTitle}" FontSize="16" FontAttributes="Bold" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- Description -->
+                    <Label Text="{Binding DocDescription}" FontSize="14" />
+
+                    <!-- Parameters -->
+                    <VerticalStackLayout Spacing="4" IsVisible="{Binding DocParameters.Count, Converter={StaticResource IntToBool}}">
+                        <Label Text="Parameters" FontSize="12" FontAttributes="Bold" Opacity="0.8" />
+                        <CollectionView ItemsSource="{Binding DocParameters}" HeightRequest="100">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:DocParameter">
+                                    <Grid ColumnDefinitions="120,*" Padding="0,4">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Label Text="{Binding Name}" FontSize="12" FontFamily="Consolas" FontAttributes="Bold" />
+                                            <Label Text="{Binding Required, Converter={StaticResource RequiredToStar}}" FontSize="12" TextColor="#EF4444" />
+                                        </HorizontalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Text="{Binding Description}" FontSize="12" />
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="{Binding Type, StringFormat='Type: {0}'}" FontSize="10" Opacity="0.6" />
+                                                <Label
+                                                    Text="{Binding DefaultValue, StringFormat='Default: {0}'}"
+                                                    FontSize="10"
+                                                    Opacity="0.6"
+                                                    IsVisible="{Binding DefaultValue, Converter={StaticResource StringToBool}}" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Examples -->
+                    <VerticalStackLayout Spacing="4" IsVisible="{Binding DocExamples.Count, Converter={StaticResource IntToBool}}">
+                        <Label Text="Examples" FontSize="12" FontAttributes="Bold" Opacity="0.8" />
+                        <Border Padding="8" BackgroundColor="{AppThemeBinding Light=#E5E7EB, Dark=#1E1E1E}" StrokeShape="RoundRectangle 4">
+                            <CollectionView ItemsSource="{Binding DocExamples}" HeightRequest="60">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Label Text="{Binding .}" FontFamily="Consolas" FontSize="11" Padding="0,2" />
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Prerequisites -->
+                    <VerticalStackLayout Spacing="4" IsVisible="{Binding DocPrerequisites.Count, Converter={StaticResource IntToBool}}">
+                        <Label Text="Prerequisites" FontSize="12" FontAttributes="Bold" Opacity="0.8" />
+                        <CollectionView ItemsSource="{Binding DocPrerequisites}" HeightRequest="40">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Border Padding="8,4" BackgroundColor="#334155" StrokeShape="RoundRectangle 4">
+                                        <Label Text="{Binding .}" FontSize="11" TextColor="White" />
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Notes -->
+                    <Label
+                        Text="{Binding DocNotes}"
+                        FontSize="12"
+                        FontStyle="Italic"
+                        Opacity="0.7"
+                        IsVisible="{Binding DocNotes, Converter={StaticResource StringToBool}}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Documentation Loading Indicator -->
+            <Border
+                Grid.Row="2"
+                Margin="0,12,0,0"
+                Padding="16"
+                IsVisible="{Binding IsLoadingDocs}"
+                BackgroundColor="{AppThemeBinding Light=#F0FDF4, Dark=#14532D}"
+                StrokeShape="RoundRectangle 8"
+                Stroke="#059669">
+                <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                    <ActivityIndicator IsRunning="True" Color="#059669" WidthRequest="24" HeightRequest="24" />
+                    <Label Text="Generating documentation..." FontSize="14" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Artifacts Panel -->
+            <Border
+                Grid.Row="3"
                 Margin="0,12,0,0"
                 Padding="12"
                 IsVisible="{Binding HasArtifacts}"

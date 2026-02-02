@@ -22,6 +22,7 @@
             <converters:SeverityToColorConverter x:Key="SeverityToColor" />
             <converters:BoolToGenerateTextConverter x:Key="BoolToGenerateText" />
             <converters:HistoryToBgColorConverter x:Key="HistoryToBgColor" />
+            <converters:RequiredToStarConverter x:Key="RequiredToStar" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

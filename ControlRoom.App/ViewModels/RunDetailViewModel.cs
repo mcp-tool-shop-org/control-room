@@ -82,9 +82,27 @@ public partial class RunDetailViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     private string aiQuickFix = "";
 
+    [ObservableProperty]
+    private bool hasDocumentation;
+
+    [ObservableProperty]
+    private bool isLoadingDocs;
+
+    [ObservableProperty]
+    private string docTitle = "";
+
+    [ObservableProperty]
+    private string docDescription = "";
+
+    [ObservableProperty]
+    private string docNotes = "";
+
     public ObservableCollection<LogLine> Lines { get; } = [];
     public ObservableCollection<ArtifactListItem> Artifacts { get; } = [];
     public ObservableCollection<string> AISuggestions { get; } = [];
+    public ObservableCollection<DocParameter> DocParameters { get; } = [];
+    public ObservableCollection<string> DocExamples { get; } = [];
+    public ObservableCollection<string> DocPrerequisites { get; } = [];
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -353,6 +371,84 @@ public partial class RunDetailViewModel : ObservableObject, IQueryAttributable
         }
     }
 
+    /// <summary>
+    /// Generate documentation for the script using AI
+    /// </summary>
+    [RelayCommand]
+    private async Task GenerateDocsAsync()
+    {
+        if (_aiAssistant is null || IsLoadingDocs)
+            return;
+
+        IsLoadingDocs = true;
+        DocParameters.Clear();
+        DocExamples.Clear();
+        DocPrerequisites.Clear();
+
+        try
+        {
+            // Check if AI is available
+            var available = await _aiAssistant.IsAvailableAsync();
+            if (!available)
+            {
+                DocDescription = "AI assistant is not available. Ensure Ollama is running.";
+                HasDocumentation = true;
+                return;
+            }
+
+            // Get script content
+            var scriptContent = await TryReadScriptContentAsync();
+            if (string.IsNullOrWhiteSpace(scriptContent))
+            {
+                DocDescription = "Could not read script file content.";
+                HasDocumentation = true;
+                return;
+            }
+
+            var scriptPath = _parsedSummary?.CommandLine?.Split(' ').FirstOrDefault() ?? "script";
+
+            var docs = await _aiAssistant.GenerateDocumentationAsync(scriptContent, scriptPath);
+
+            DocTitle = docs.Title;
+            DocDescription = docs.Description;
+            DocNotes = docs.Notes ?? "";
+
+            foreach (var param in docs.Parameters)
+            {
+                DocParameters.Add(new DocParameter
+                {
+                    Name = param.Name,
+                    Description = param.Description,
+                    Type = param.Type ?? "string",
+                    Required = param.Required,
+                    DefaultValue = param.DefaultValue ?? ""
+                });
+            }
+
+            foreach (var example in docs.Examples)
+            {
+                DocExamples.Add(example);
+            }
+
+            foreach (var prereq in docs.Prerequisites)
+            {
+                DocPrerequisites.Add(prereq);
+            }
+
+            HasDocumentation = true;
+            Lines.Add(new LogLine("── Documentation generated ──", false, DateTimeOffset.UtcNow));
+        }
+        catch (Exception ex)
+        {
+            DocDescription = $"Documentation generation failed: {ex.Message}";
+            HasDocumentation = true;
+        }
+        finally
+        {
+            IsLoadingDocs = false;
+        }
+    }
+
     [RelayCommand]
     private async Task OpenArtifactAsync(ArtifactListItem? artifact)
     {
@@ -612,3 +708,15 @@ public partial class RunDetailViewModel : ObservableObject, IQueryAttributable
 }
 
 public record LogLine(string Text, bool IsError, DateTimeOffset Timestamp);
+
+/// <summary>
+/// Documentation parameter for display
+/// </summary>
+public class DocParameter
+{
+    public string Name { get; init; } = "";
+    public string Description { get; init; } = "";
+    public string Type { get; init; } = "string";
+    public bool Required { get; init; }
+    public string DefaultValue { get; init; } = "";
+}

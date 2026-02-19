@@ -1,0 +1,22 @@
+VERIFICATION
+============
+
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+
+The application is downloaded from the official GitHub releases page:
+https://github.com/mcp-tool-shop-org/control-room/releases
+
+The specific download URL used in this package:
+https://github.com/mcp-tool-shop-org/control-room/releases/download/v1.0.0/ControlRoom-win-x64.zip
+
+To verify the checksum:
+1. Download the ZIP file from the URL above
+2. Run: Get-FileHash ControlRoom-win-x64.zip -Algorithm SHA256
+3. Compare the result with the checksum in chocolateyinstall.ps1
+
+The package source code is available at:
+https://github.com/mcp-tool-shop-org/control-room/tree/main/choco
+
+License: MIT
+License URL: https://github.com/mcp-tool-shop-org/control-room/blob/main/LICENSE

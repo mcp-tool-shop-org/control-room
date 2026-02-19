@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if "Ω" doesn't appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>controlroom</id>
+    <version>1.0.0</version>
+    <title>Control Room</title>
+    <authors>mcp-tool-shop</authors>
+    <owners>mikeyfrilot</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/mcp-tool-shop-org/control-room/blob/main/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/mcp-tool-shop-org/control-room</projectUrl>
+    <projectSourceUrl>https://github.com/mcp-tool-shop-org/control-room</projectSourceUrl>
+    <packageSourceUrl>https://github.com/mcp-tool-shop-org/control-room/tree/main/choco</packageSourceUrl>
+    <bugTrackerUrl>https://github.com/mcp-tool-shop-org/control-room/issues</bugTrackerUrl>
+    <docsUrl>https://github.com/mcp-tool-shop-org/control-room/blob/main/ARCHITECTURE.md</docsUrl>
+    <tags>controlroom automation scripts observability desktop maui dotnet</tags>
+    <summary>Local-first script execution and task management with evidence-grade observability.</summary>
+    <description>Control Room is a Windows desktop application for local-first script execution and task management. It provides evidence-grade observability, failure fingerprinting, and a command palette for managing automation workflows.
+
+## Features
+
+- Local-first SQLite storage (works offline, no server required)
+- Evidence-grade run tracking with full reproducibility metadata
+- Failure fingerprinting and recurring failure detection
+- Command palette with fuzzy search
+- Profile-based script execution with environment overrides
+- ZIP export of run evidence
+- Timeline filtering by failure fingerprint
+
+## Notes
+
+- Requires Windows 10 version 1809 (build 17763) or later
+- Self-contained deployment (no .NET runtime installation required)
+- Installs to Chocolatey tools directory
+    </description>
+    <releaseNotes>https://github.com/mcp-tool-shop-org/control-room/blob/main/CHANGELOG.md</releaseNotes>
+    <copyright>Copyright (c) 2025-2026 MCP Tool Shop</copyright>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

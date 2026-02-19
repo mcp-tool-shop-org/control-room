@@ -256,7 +256,7 @@
                     <Label
                         Text="{Binding DocNotes}"
                         FontSize="12"
-                        FontStyle="Italic"
+                        FontAttributes="Italic"
                         Opacity="0.7"
                         IsVisible="{Binding DocNotes, Converter={StaticResource StringToBool}}" />
                 </VerticalStackLayout>

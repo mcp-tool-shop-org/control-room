@@ -2,7 +2,7 @@
 
 A local-first desktop app for managing and executing scripts, servers, and tasks with full observability.
 
-[![CI](https://github.com/mcp-tool-shop/control-room/actions/workflows/ci.yml/badge.svg)](https://github.com/mcp-tool-shop/control-room/actions/workflows/ci.yml)
+[![CI](https://github.com/mcp-tool-shop-org/control-room/actions/workflows/ci.yml/badge.svg)](https://github.com/mcp-tool-shop-org/control-room/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## What is Control Room?

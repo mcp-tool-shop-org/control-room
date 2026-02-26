@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mcp-tool-shop-org/control-room/main/assets/logo-control-room.png" alt="Control Room" width="400">
+  <img src="https://raw.githubusercontent.com/mcp-tool-shop-org/brand/main/logos/control-room/readme.png" alt="Control Room" width="400">
 </p>
 
 <p align="center">

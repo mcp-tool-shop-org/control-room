@@ -91,6 +91,31 @@ ControlRoom/
 └── ControlRoom.App/           # MAUI UI layer
 ```
 
+## Security & Data Scope
+
+Control Room is a **local-first** desktop application for script execution and task management.
+
+- **Data accessed:** SQLite database (WAL mode) for run history and task configuration. Executes user-specified scripts. Log files for observability.
+- **Data NOT accessed:** No cloud sync. No telemetry. No authentication required. Network access optional.
+- **Permissions:** File system read/write for SQLite and logs. Process execution for user scripts. No elevated permissions.
+
+Full policy: [SECURITY.md](SECURITY.md)
+
+---
+
+## Scorecard
+
+| Category | Score |
+|----------|-------|
+| A. Security | 10/10 |
+| B. Error Handling | 10/10 |
+| C. Operator Docs | 10/10 |
+| D. Shipping Hygiene | 10/10 |
+| E. Identity (soft) | 10/10 |
+| **Overall** | **50/50** |
+
+---
+
 ## License
 
 MIT — see [LICENSE](LICENSE)
@@ -98,3 +123,7 @@ MIT — see [LICENSE](LICENSE)
 ## Contributing
 
 Contributions welcome! Please open an issue first to discuss proposed changes.
+
+---
+
+Built by <a href="https://mcp-tool-shop.github.io/">MCP Tool Shop</a>

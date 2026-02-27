@@ -37,7 +37,7 @@
 		<ApplicationId>com.mikeyfrilot.controlroom</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<!-- Microsoft Store Packaging Configuration -->

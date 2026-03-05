@@ -14,7 +14,7 @@ export const config: SiteConfig = {
     headlineAccent: 'scripts that explain themselves.',
     description: 'Turns your scripts into observable, repeatable operations. Evidence-grade logging, failure fingerprinting, run profiles, and ZIP export \u2014 all local, all keyboard-driven.',
     primaryCta: { href: '#quick-start', label: 'Get started' },
-    secondaryCta: { href: '#features', label: 'Learn more' },
+    secondaryCta: { href: 'handbook/', label: 'Read the Handbook' },
     previews: [
       { label: 'Build', code: 'dotnet build' },
       { label: 'Run', code: 'dotnet run --project ControlRoom.App' },

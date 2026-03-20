@@ -22,7 +22,7 @@ This guide walks through publishing Control Room to the Microsoft Store. The app
 - ✅ Package identity configured (MikeyFrilot.ControlRoom)
 - ✅ Publisher name set to CN=mikeyfrilot
 - ✅ MSIX packaging enabled in project file
-- ✅ Application version: 1.0.0
+- ✅ Application version: 1.0.2
 
 ---
 
@@ -85,7 +85,7 @@ Review and update [ControlRoom.App\ControlRoom.App.csproj](ControlRoom.App\Contr
     <ApplicationId>com.mikeyfrilot.controlroom</ApplicationId>
     
     <!-- Current version -->
-    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     
     <!-- Microsoft Store configuration -->
@@ -277,7 +277,7 @@ Use the .pfx certificate created in Step 4.
 - [ ] Screenshots uploaded (3+ minimum)
 - [ ] Description and keywords finalized
 - [ ] Privacy policy URL entered (see below)
-- [ ] Version number matches (1.0.0)
+- [ ] Version number matches (1.0.2)
 - [ ] MSIX package built and certified
 - [ ] No certification kit errors
 
@@ -466,5 +466,5 @@ Add-AppxPackage -Path "PublishOutput\ControlRoom.msix"
 
 **App Name**: Control Room  
 **Package**: MikeyFrilot.ControlRoom  
-**Version**: 1.0.0  
+**Version**: 1.0.2  
 **Target**: Windows 10+ (Build 19041+)

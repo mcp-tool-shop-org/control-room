@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $packageName = $env:ChocolateyPackageName
 $toolsDir    = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
 
-$url         = 'https://github.com/mcp-tool-shop-org/control-room/releases/download/v1.0.0/ControlRoom-win-x64.zip'
+$url         = 'https://github.com/mcp-tool-shop-org/control-room/releases/download/v1.0.2/ControlRoom-win-x64.zip'
 $checksum    = '174CDC593B95C6C597D080830DCB041C39755F70C4E8ADF76C8629873743AFCD'
 $checksumType = 'sha256'
 

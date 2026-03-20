@@ -111,13 +111,48 @@ public sealed class ScriptRunner : IScriptRunner
     private static string BuildArgs(string filePath, string args)
     {
         var ext = Path.GetExtension(filePath).ToLowerInvariant();
+        var quotedArgs = string.IsNullOrWhiteSpace(args) ? "" : $" {QuoteArguments(args)}";
         return ext switch
         {
-            ".ps1" => $"-NoProfile -ExecutionPolicy Bypass -File \"{filePath}\" {args}",
-            ".cmd" or ".bat" => $"/c \"\"{filePath}\" {args}\"",
-            ".py" => $"\"{filePath}\" {args}",
-            ".sh" => $"\"{filePath}\" {args}",
+            ".ps1" => $"-NoProfile -ExecutionPolicy Bypass -File \"{filePath}\"{quotedArgs}",
+            ".cmd" or ".bat" => $"/c \"\"{filePath}\"{quotedArgs}\"",
+            ".py" => $"\"{filePath}\"{quotedArgs}",
+            ".sh" => $"\"{filePath}\"{quotedArgs}",
             _ => args
         };
+    }
+
+    /// <summary>
+    /// Quotes each whitespace-delimited argument that isn't already quoted,
+    /// preventing injection via spaces or shell metacharacters.
+    /// </summary>
+    private static string QuoteArguments(string args)
+    {
+        if (string.IsNullOrWhiteSpace(args)) return args;
+
+        var parts = new List<string>();
+        var i = 0;
+        while (i < args.Length)
+        {
+            if (char.IsWhiteSpace(args[i])) { i++; continue; }
+
+            // Already-quoted argument — preserve as-is
+            if (args[i] == '"')
+            {
+                var end = args.IndexOf('"', i + 1);
+                if (end < 0) end = args.Length - 1;
+                parts.Add(args.Substring(i, end - i + 1));
+                i = end + 1;
+            }
+            else
+            {
+                var end = i;
+                while (end < args.Length && !char.IsWhiteSpace(args[end])) end++;
+                var token = args.Substring(i, end - i);
+                parts.Add($"\"{token}\"");
+                i = end;
+            }
+        }
+        return string.Join(" ", parts);
     }
 }

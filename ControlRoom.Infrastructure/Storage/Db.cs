@@ -8,7 +8,17 @@ public sealed class Db
 
     public Db(string dbPath)
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
+        var dir = Path.GetDirectoryName(dbPath)!;
+        try
+        {
+            Directory.CreateDirectory(dir);
+        }
+        catch (Exception ex) when (ex is UnauthorizedAccessException or IOException)
+        {
+            throw new InvalidOperationException(
+                $"Cannot create database directory '{dir}': {ex.Message}", ex);
+        }
+
         _connectionString = new SqliteConnectionStringBuilder
         {
             DataSource = dbPath,
@@ -20,16 +30,25 @@ public sealed class Db
     public SqliteConnection Open()
     {
         var conn = new SqliteConnection(_connectionString);
-        conn.Open();
+        try
+        {
+            conn.Open();
 
-        using var cmd = conn.CreateCommand();
-        cmd.CommandText = """
-            PRAGMA journal_mode = WAL;
-            PRAGMA synchronous = NORMAL;
-            PRAGMA foreign_keys = ON;
-            """;
-        cmd.ExecuteNonQuery();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = """
+                PRAGMA journal_mode = WAL;
+                PRAGMA synchronous = NORMAL;
+                PRAGMA foreign_keys = ON;
+                """;
+            cmd.ExecuteNonQuery();
 
-        return conn;
+            return conn;
+        }
+        catch (SqliteException ex)
+        {
+            conn.Dispose();
+            throw new InvalidOperationException(
+                $"Failed to open database: {ex.Message}", ex);
+        }
     }
 }

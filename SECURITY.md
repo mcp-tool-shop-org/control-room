@@ -4,7 +4,7 @@
 
 **Do not** open public issues for security vulnerabilities. Instead:
 
-1. **Email security@mcp-tool-shop.dev** (or maintainers directly if that address is unavailable)
+1. **Email 64996768+mcp-tool-shop@users.noreply.github.com**
 2. **Include**:
    - Description of the vulnerability
    - Steps to reproduce

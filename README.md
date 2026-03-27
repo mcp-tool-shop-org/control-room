@@ -12,20 +12,26 @@
   <a href="https://mcp-tool-shop-org.github.io/control-room/"><img src="https://img.shields.io/badge/Landing_Page-live-blue" alt="Landing Page"></a>
 </p>
 
-**A local-first desktop app for managing and executing scripts, servers, and tasks with full observability.**
+**A local-first desktop app for managing scripts, multi-step workflows, and automated operations with full observability, alerting, and self-healing.**
 
 ## What is Control Room?
 
 Control Room turns your scripts into observable, repeatable operations. Instead of running `python train.py --config=prod` in a terminal and hoping for the best, you get:
 
-- **Evidence-grade runs** — Every execution is logged with stdout/stderr, exit codes, timing, and artifacts
+- **Evidence-grade runs** — Every execution is logged with stdout/stderr, exit codes, timing, and SHA256-hashed artifacts
 - **Failure fingerprinting** — Recurring errors are grouped and tracked across runs
 - **Profiles** — Define preset argument/environment combinations (Smoke, Full, Debug) per script
+- **Runbooks** — Multi-step DAG workflows with dependencies, conditions, retry policies, and parallel execution
+- **Triggers** — Schedule runbooks on cron, fire them via webhook, or watch files for changes
+- **Metrics & Alerts** — Track counters, gauges, histograms, and timers; fire alerts when thresholds breach
+- **Health Checks** — Monitor HTTP endpoints, TCP ports, DNS, databases, and Windows services
+- **Self-Healing** — Automatically run remediation runbooks when alerts fire
+- **AI Assistant** — Ollama-powered error explanation, fix suggestions, and script generation (optional)
 - **Command palette** — Keyboard-driven execution with fuzzy search
 
 ## Features
 
-### Profiles (New!)
+### Run Profiles
 
 Define multiple run configurations for each script:
 
@@ -39,9 +45,41 @@ Thing: "train-model"
 
 The command palette shows each profile as a separate action. Retrying a failed run uses the same profile that failed.
 
+### Runbooks
+
+Chain multiple scripts into DAG workflows. Steps execute in parallel where dependencies allow, with configurable conditions:
+
+- **OnSuccess** — run only if all dependencies succeeded
+- **OnFailure** — run only if a dependency failed (cleanup/rollback steps)
+- **Always** — run regardless of dependency outcome
+- **Expression** — custom boolean logic (`step1.succeeded AND step2.failed`)
+
+Each step supports retry policies with exponential backoff, per-step timeouts, and argument overrides.
+
+### Triggers
+
+Automate runbook execution with four trigger types:
+
+- **Manual** — started by user action
+- **Schedule** — cron-based recurring execution
+- **Webhook** — triggered by HTTP POST with HMAC-SHA256 signature validation
+- **File Watch** — triggered when files in a watched directory change (with debounce)
+
 ### Failure Groups
 
-Failures are fingerprinted by error signature. The Failures page shows recurring issues grouped by fingerprint, with recurrence count and first/last seen timestamps.
+Failures are fingerprinted by error signature. The fingerprint algorithm normalizes stderr by stripping timestamps, collapsing GUIDs, memory addresses, file paths, and line numbers before hashing. The Failures page shows recurring issues grouped by fingerprint, with recurrence count and first/last seen timestamps.
+
+### Metrics & Alerts
+
+Track operational metrics (script duration, success/failure rates, system CPU/memory/disk) and define alert rules with conditions like GreaterThan, PercentChange, or Anomaly (Z-score). Alerts support cooldown periods, severity levels (Info/Warning/Error/Critical), and actions (notification, email, webhook, or triggering a runbook).
+
+### Health Checks
+
+Monitor infrastructure with seven check types: HTTP, TCP, DNS, Ping, Script, Database (SQLite), and Windows Service. Each check runs on a configurable interval with timeout, and results roll up into an overall system health status (Healthy/Degraded/Unhealthy).
+
+### Self-Healing
+
+Define rules that match alert conditions and automatically execute remediation runbooks. Built-in patterns cover high CPU, high memory, low disk, and script failure scenarios. Rules support rate limiting, cooldown periods, and optional human approval before execution.
 
 ### Timeline
 
@@ -53,13 +91,15 @@ Export any run as a ZIP containing:
 - `run-info.json` — Full metadata (args, env, timing, profile used)
 - `stdout.txt` / `stderr.txt` — Complete output
 - `events.jsonl` — Machine-readable event stream
-- `artifacts/` — Any collected artifacts
+- `artifacts/` — Any collected artifacts (with SHA256 checksums)
 
 ## Tech Stack
 
 - **.NET MAUI** — Cross-platform desktop UI (Windows focus)
-- **SQLite (WAL mode)** — Local-first persistence
+- **SQLite (WAL mode)** — Local-first persistence with concurrent read access during runs
 - **CommunityToolkit.Mvvm** — MVVM with source generators
+- **NCrontab** — Cron expression parsing for scheduled triggers
+- **Ollama** — Optional local LLM for AI-powered error analysis and script generation
 
 ## Getting Started
 
@@ -85,9 +125,18 @@ dotnet run --project ControlRoom.App
 
 ```
 ControlRoom/
-├── ControlRoom.Domain/        # Domain models (Thing, Run, ThingConfig, etc.)
-├── ControlRoom.Application/   # Use cases (RunLocalScript, etc.)
-├── ControlRoom.Infrastructure/ # SQLite storage, queries
+├── ControlRoom.Domain/        # Domain models (Thing, Run, Runbook, Metrics, Alerts)
+│   ├── Model/                 # Records: Thing, Run, RunEvent, Artifact, Runbook,
+│   │                          #   ThingConfig, RunSummary, Metrics, AlertRule, HealthCheck
+│   └── Services/              # IAIAssistant interface
+├── ControlRoom.Application/   # Use cases and services
+│   ├── UseCases/              # RunLocalScript, RunbookExecutor
+│   └── Services/              # AlertEngine, HealthCheckService,
+│                              #   SelfHealingEngine, TriggerService
+├── ControlRoom.Infrastructure/ # SQLite storage, queries, process runner
+│   ├── Storage/               # Db, Migrator, Queries (Thing, Run, Runbook, etc.)
+│   ├── Process/               # ScriptRunner (ps1, py, sh, bat auto-detection)
+│   └── AI/                    # OllamaAIAssistant
 └── ControlRoom.App/           # MAUI UI layer
 ```
 

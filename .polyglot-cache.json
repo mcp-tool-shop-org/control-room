@@ -1,0 +1,915 @@
+{
+  "version": 1,
+  "entries": {
+    "66c5bf069d9ece42": {
+      "translation": "**完全な可視性を持つ、スクリプト、サーバー、タスクの管理と実行を行うための、ローカル環境に最適化されたデスクトップアプリケーションです。**",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "e39c937cb2ee7143": {
+      "translation": "Control Roomとは？",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "76e7787b7acb57a0": {
+      "translation": "Control Roomは、スクリプトを監視可能で、再現可能な操作に変換します。ターミナルで`python train.py --config=prod`を実行し、結果を祈る代わりに、以下の機能が利用できます。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "1ad930135b270b22": {
+      "translation": "- **証拠レベルの実行記録**：すべての実行は、標準出力/標準エラー出力、終了コード、実行時間、および関連ファイルを記録します。\n- **エラーのフィンガープリント**：再発するエラーはグループ化され、実行全体で追跡されます。\n- **プロファイル**：スクリプトごとに、あらかじめ定義された引数/環境の組み合わせ（テスト、フル、デバッグなど）を設定できます。\n- **コマンドパレット**：キーボード操作による実行が可能で、あいまい検索も利用できます。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "fc8e4bf84165ea76": {
+      "translation": "機能",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "25dd88fa488aa39e": {
+      "translation": "プロファイル（新機能！）",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "41c252bebb70a7c1": {
+      "translation": "各スクリプトに対して、複数の実行構成を定義できます。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "4d946852b6a66133": {
+      "translation": "コマンドパレットでは、各プロファイルが個別の操作として表示されます。失敗した実行を再試行する場合、同じプロファイルが使用されます。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "bc9bf7248d9b661d": {
+      "translation": "エラーグループ",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "58d8fed8b60f7fc8": {
+      "translation": "エラーは、エラーの内容に基づいてフィンガープリントされます。エラーページでは、再発する問題がフィンガープリントごとにグループ化され、発生回数と、最初に/最後に確認されたタイムスタンプが表示されます。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "315b4b84a38f8596": {
+      "translation": "タイムライン",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "2fe1431ec983b2b1": {
+      "translation": "すべての実行を時系列で表示します。エラーフィンガープリントでフィルタリングすると、特定の特定のエラーのすべての発生を表示できます。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "2b24932e0d4c00da": {
+      "translation": "ZIPエクスポート",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "0ecb938c8fb19e05": {
+      "translation": "任意の実行を、以下の内容を含むZIPファイルとしてエクスポートできます。\n- `run-info.json`：完全なメタデータ（引数、環境、実行時間、使用プロファイル）\n- `stdout.txt` / `stderr.txt`：完全な出力\n- `events.jsonl`：機械可読なイベントストリーム\n- `artifacts/`：収集された関連ファイル",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "b1d590e69cdfe65d": {
+      "translation": "技術スタック",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "64ad1ed3f48dafdb": {
+      "translation": "- **.NET MAUI**：クロスプラットフォームのデスクトップUI（Windowsに最適化）\n- **SQLite (WALモード)**：ローカル環境でのデータ永続化\n- **CommunityToolkit.Mvvm**：ソースジェネレーターを使用したMVVM",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "52a006b5d0f08732": {
+      "translation": "始め方",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "651b78d8c0ebde91": {
+      "translation": "前提条件",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "bea57c6ad3777af9": {
+      "translation": "- .NET 10 SDK\n- Windows 10/11",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "86900fda0f5c4d2d": {
+      "translation": "ビルド",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "f911c1618833b55d": {
+      "translation": "実行",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "1d417df09230eb05": {
+      "translation": "プロジェクト構造",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "08ea9dfbe36d981b": {
+      "translation": "ライセンス",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "ed5a1861cb25e64e": {
+      "translation": "MIT — [LICENSE](LICENSE) を参照",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "bd927c669c7a0d9c": {
+      "translation": "貢献",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "e38008a47d36be87": {
+      "translation": "貢献を歓迎します！変更を提案する前に、まずIssueを作成して議論してください。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083347429
+    },
+    "31d33d1dc335d23f": {
+      "translation": "**一款以本地优先为原则的桌面应用程序，用于管理和执行脚本、服务器和任务，并提供全面的可观察性。**",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "4451574f2c2d29a7": {
+      "translation": "什么是控制中心？",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "f1cf0657477fbbef": {
+      "translation": "控制中心将您的脚本转化为可观察、可重复的操作。与其在终端中运行 `python train.py --config=prod` 并希望一切顺利，您将获得：",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "d711978051d3739d": {
+      "translation": "- **高质量的执行记录** — 每次执行都会记录标准输出/标准错误、退出码、运行时间和相关文件。\n- **错误指纹识别** — 经常出现的错误会被分组并跟踪，以便进行分析。\n- **配置方案** — 为每个脚本定义预设的参数/环境组合（例如：测试、完整、调试）。\n- **命令面板** — 通过键盘驱动的执行，并支持模糊搜索。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "c6c20d03bfc6bd19": {
+      "translation": "功能",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "b0e2172a83118a7b": {
+      "translation": "配置方案（新功能！）",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "77e5392580c5d7c2": {
+      "translation": "为每个脚本定义多个运行配置：",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "6ee6d3feb22e3077": {
+      "translation": "命令面板会显示每个配置方案作为一个独立的动作。 重新运行失败的执行将使用导致失败的相同配置方案。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "495c5af863f76855": {
+      "translation": "错误分组",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "6dc7bb220046e0f7": {
+      "translation": "错误通过错误签名进行指纹识别。 “错误”页面显示重复出现的错误，并按指纹进行分组，包括出现次数和首次/最后出现的时间戳。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "02ad74ea7f7ae9c2": {
+      "translation": "时间轴",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "714dbae8ccc8c32d": {
+      "translation": "按时间顺序查看所有执行记录。 通过错误指纹进行过滤，以查看特定错误的每次出现。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "1d2d9b1b9c41fb40": {
+      "translation": "ZIP 导出",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "255b00151e3dbf7c": {
+      "translation": "将任何执行记录导出为 ZIP 文件，其中包含：\n- `run-info.json` — 完整的元数据（参数、环境、运行时间、使用的配置方案）。\n- `stdout.txt` / `stderr.txt` — 完整的输出。\n- `events.jsonl` — 机器可读的事件流。\n- `artifacts/` — 收集到的所有相关文件。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "f2d2bf6369660209": {
+      "translation": "技术栈",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "40f827a20836ebeb": {
+      "translation": "- **.NET MAUI** — 跨平台桌面用户界面（主要针对 Windows）。\n- **SQLite (WAL 模式)** — 本地优先的数据持久化。\n- **CommunityToolkit.Mvvm** — 基于源代码生成器的 MVVM 框架。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "2e2674b9519d6e2e": {
+      "translation": "入门",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "f6c30ea5bc48fbb7": {
+      "translation": "先决条件",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "bd9ca86df0acebf3": {
+      "translation": "- .NET 10 SDK\n- Windows 10/11",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "d4856eb53baefc4d": {
+      "translation": "构建",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "a463bd0fbff77d13": {
+      "translation": "运行",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "ff01fb234ea9ac38": {
+      "translation": "项目结构",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "1fb815b9a436fadb": {
+      "translation": "许可证",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "b305382143edecae": {
+      "translation": "MIT — 参见 [LICENSE](LICENSE)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "f24c2aff2448e6af": {
+      "translation": "贡献",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "d584eba44b2590dd": {
+      "translation": "欢迎贡献！ 请先提出问题，讨论您提出的更改。",
+      "model": "translategemma:12b",
+      "timestamp": 1772083363076
+    },
+    "35e8984a19881103": {
+      "translation": "**Una aplicación de escritorio centrada en el usuario local para gestionar y ejecutar scripts, servidores y tareas, con total visibilidad.**",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "eb8f8900ad5a1617": {
+      "translation": "¿Qué es Control Room?",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "6e73fb357d91602f": {
+      "translation": "Control Room transforma sus scripts en operaciones observables y repetibles. En lugar de ejecutar `python train.py --config=prod` en una terminal y esperar lo mejor, obtiene:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "91fce4d7cba751f1": {
+      "translation": "- **Ejecuciones con registro detallado** — Cada ejecución se registra con la salida estándar/error estándar, códigos de salida, tiempos de ejecución y archivos adjuntos.\n- **Identificación de fallos** — Los errores recurrentes se agrupan y se rastrean en todas las ejecuciones.\n- **Perfiles** — Defina combinaciones predefinidas de argumentos/entornos (Prueba rápida, Completa, Depuración) para cada script.\n- **Paleta de comandos** — Ejecución mediante teclado con búsqueda difusa.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "422fb4b958d31758": {
+      "translation": "Características",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "560a2afcb12dbf56": {
+      "translation": "Perfiles (¡Nuevo!)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "dca9d7e909a8f7e0": {
+      "translation": "Defina múltiples configuraciones de ejecución para cada script:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "d6d7002a3e762c17": {
+      "translation": "La paleta de comandos muestra cada perfil como una acción separada. Reintentar una ejecución fallida utiliza el mismo perfil que falló.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "04ce3b5bc543fa4d": {
+      "translation": "Grupos de fallos",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "3f2cebdf978bfbcd": {
+      "translation": "Los fallos se identifican mediante la firma del error. La página de \"Fallos\" muestra los problemas recurrentes agrupados por firma, con el número de repeticiones y las marcas de tiempo de la primera y última aparición.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "d4f98358cdf5c670": {
+      "translation": "Línea de tiempo",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "3cb28ce3b132e744": {
+      "translation": "Visualice todas las ejecuciones cronológicamente. Filtre por la firma del fallo para ver cada aparición de un error específico.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "8ebd9cef0681ada6": {
+      "translation": "Exportación ZIP",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "47098d40b5842cda": {
+      "translation": "Exporte cualquier ejecución como un archivo ZIP que contenga:\n- `run-info.json` — Metadatos completos (argumentos, entorno, tiempos de ejecución, perfil utilizado).\n- `stdout.txt` / `stderr.txt` — Salida completa.\n- `events.jsonl` — Flujo de eventos legible por máquina.\n- `artifacts/` — Cualquier archivo adjunto recopilado.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "39fa0a87c6d9f1fb": {
+      "translation": "Tecnologías utilizadas",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "56ac2c737c0aa800": {
+      "translation": "- **.NET MAUI** — Interfaz de usuario de escritorio multiplataforma (centrado en Windows).\n- **SQLite (modo WAL)** — Persistencia centrada en el usuario local.\n- **CommunityToolkit.Mvvm** — MVVM con generadores de código.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "9f2e70eeeecbe93e": {
+      "translation": "Cómo empezar",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "c8d1eb8a11343ac4": {
+      "translation": "Requisitos previos",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "65ee0d932ce90f16": {
+      "translation": "- .NET 10 SDK\n- Windows 10/11",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "c9ee7e56a356f6ed": {
+      "translation": "Compilación",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "23bd1359bf344911": {
+      "translation": "Ejecución",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "cc290f922a5da509": {
+      "translation": "Estructura del proyecto",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "9572f74b6d3f62b1": {
+      "translation": "Licencia",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "cd28d4896253fcd0": {
+      "translation": "MIT — consulte [LICENSE](LICENSE)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "7bdc45e8ddfa02fc": {
+      "translation": "Contribuciones",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "70f8a66525d19b16": {
+      "translation": "¡Las contribuciones son bienvenidas! Abra primero un problema para discutir los cambios propuestos.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083380102
+    },
+    "e7e44799f5e9a12e": {
+      "translation": "**Une application de bureau conçue pour fonctionner localement, permettant de gérer et d'exécuter des scripts, des serveurs et des tâches, avec une visibilité complète.**",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "e99f400890de2526": {
+      "translation": "Qu'est-ce que Control Room ?",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "74878eb9df17d479": {
+      "translation": "Control Room transforme vos scripts en opérations observables et reproductibles. Au lieu d'exécuter `python train.py --config=prod` dans un terminal et d'espérer le meilleur, vous obtenez :",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "a7dc232f57864d92": {
+      "translation": "- **Exécutions avec preuves irréfutables** — Chaque exécution est enregistrée avec les flux standard de sortie/erreur, les codes de sortie, les informations de temps et les artefacts.\n- **Identification des erreurs récurrentes** — Les erreurs récurrentes sont regroupées et suivies à travers les exécutions.\n- **Profils** — Définissez des combinaisons prédéfinies d'arguments/d'environnement (Test rapide, Complet, Débogage) pour chaque script.\n- **Palette de commandes** — Exécution via le clavier avec recherche floue.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "9244388ee3d9cea2": {
+      "translation": "Fonctionnalités",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "cf2b01610926dcf9": {
+      "translation": "Profils (Nouveau !)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "1b0c34af2a9abf2b": {
+      "translation": "Définissez plusieurs configurations d'exécution pour chaque script :",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "b56119de657d4e4b": {
+      "translation": "La palette de commandes affiche chaque profil comme une action distincte. La tentative de relance d'une exécution échouée utilise le même profil qui a échoué.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "8ae530b17eaa2255": {
+      "translation": "Groupes d'erreurs",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "120c48d786ce0032": {
+      "translation": "Les erreurs sont identifiées par leur signature. La page \"Erreurs\" affiche les problèmes récurrents regroupés par signature, avec le nombre d'occurrences et les horodatages de la première et de la dernière occurrence.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "528f9ed0f39d4ff0": {
+      "translation": "Chronologie",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "9ecb8390a2b4609e": {
+      "translation": "Visualisez toutes les exécutions de manière chronologique. Filtrez par signature d'erreur pour voir toutes les occurrences d'une erreur spécifique.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "dbf499ffb4c855a1": {
+      "translation": "Exportation ZIP",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "a222b40f08a95bb1": {
+      "translation": "Exportez n'importe quelle exécution au format ZIP, contenant :\n- `run-info.json` — Métadonnées complètes (arguments, environnement, temps d'exécution, profil utilisé).\n- `stdout.txt` / `stderr.txt` — Sortie complète.\n- `events.jsonl` — Flux d'événements lisible par machine.\n- `artifacts/` — Tous les artefacts collectés.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "d93067f99d3f3ceb": {
+      "translation": "Technologies utilisées",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "1d85996bae6ae9b4": {
+      "translation": "- **.NET MAUI** — Interface utilisateur de bureau multiplateforme (principalement pour Windows).\n- **SQLite (mode WAL)** — Persistance locale.\n- **CommunityToolkit.Mvvm** — MVVM avec générateurs de code source.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "999db8ed2f10ebde": {
+      "translation": "Premiers pas",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "de5ffc5e5ee34cae": {
+      "translation": "Prérequis",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "98f4a47e9773ef10": {
+      "translation": "- SDK .NET 10\n- Windows 10/11",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "b3d04bc169f9bacd": {
+      "translation": "Compilation",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "675fca605cde3b16": {
+      "translation": "Exécution",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "79d1da0af5708b6a": {
+      "translation": "Structure du projet",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "0174ffc9d6992c72": {
+      "translation": "Licence",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "e82e49810bd120ed": {
+      "translation": "MIT — voir [LICENSE](LICENSE)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "262cf60b803dacd5": {
+      "translation": "Contributions",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "fc4fe839e6f352b4": {
+      "translation": "Les contributions sont les bienvenues ! Veuillez ouvrir un ticket au préalable pour discuter des modifications proposées.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083397960
+    },
+    "093b615746d16656": {
+      "translation": "**एक ऐसा डेस्कटॉप एप्लिकेशन जो स्थानीय रूप से काम करता है और स्क्रिप्ट, सर्वर और कार्यों को प्रबंधित और निष्पादित करने में मदद करता है, साथ ही यह पूरी तरह से निगरानी करने की क्षमता प्रदान करता है।**",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "160c6b7f9e003dd7": {
+      "translation": "कंट्रोल रूम क्या है?",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "2a85a4430e43f89b": {
+      "translation": "कंट्रोल रूम आपकी स्क्रिप्ट को ऐसे कार्यों में बदल देता है जिन्हें देखा जा सकता है और जिन्हें दोहराया जा सकता है। टर्मिनल में `python train.py --config=prod` चलाने और सर्वोत्तम परिणाम की उम्मीद करने के बजाय, आपको यह मिलता है:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "4068ec0e57d64891": {
+      "translation": "- **विश्वसनीय निष्पादन रिकॉर्ड** — प्रत्येक निष्पादन को stdout/stderr, एग्जिट कोड, समय और अन्य महत्वपूर्ण जानकारी के साथ लॉग किया जाता है।\n- **त्रुटि विश्लेषण** — बार-बार होने वाली त्रुटियों को समूहीकृत किया जाता है और विभिन्न निष्पादों में ट्रैक किया जाता है।\n- **प्रोफाइल** — प्रत्येक स्क्रिप्ट के लिए पूर्वनिर्धारित तर्क/पर्यावरण संयोजनों को परिभाषित करें (जैसे, प्रारंभिक परीक्षण, पूर्ण परीक्षण, डिबग)।\n- **कमांड पैलेट** — कीबोर्ड के माध्यम से निष्पादन, जिसमें फ़ज़ी खोज की सुविधा है।",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "d0bfd0df3ecd0d7f": {
+      "translation": "विशेषताएं",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "04828c79e0db7338": {
+      "translation": "प्रोफाइल (नया!)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "08c905d20127975b": {
+      "translation": "प्रत्येक स्क्रिप्ट के लिए कई निष्पादन कॉन्फ़िगरेशन परिभाषित करें:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "01986b9486e21393": {
+      "translation": "कमांड पैलेट प्रत्येक प्रोफाइल को एक अलग कार्रवाई के रूप में दिखाता है। किसी विफल निष्पादन को पुनः चलाने पर, वही प्रोफाइल उपयोग किया जाता है जो विफल हुआ था।",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "011422408e8a7572": {
+      "translation": "त्रुटि समूह",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "f4f60471cca0dc5d": {
+      "translation": "त्रुटियों को उनके हस्ताक्षर के आधार पर वर्गीकृत किया जाता है। \"त्रुटि\" पृष्ठ पर, बार-बार होने वाली समस्याओं को उनके हस्ताक्षर के आधार पर समूहीकृत किया जाता है, साथ ही उनकी पुनरावृत्ति की संख्या और पहली/अंतिम देखे गए समय के स्टैम्प भी प्रदर्शित होते हैं।",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "ae52f89b95f200af": {
+      "translation": "टाइमलाइन",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "fa24f16647393a3c": {
+      "translation": "सभी निष्पादों को कालानुक्रमिक क्रम में देखें। किसी विशिष्ट त्रुटि के सभी उदाहरणों को देखने के लिए, त्रुटि हस्ताक्षर के आधार पर फ़िल्टर करें।",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "7425d5ad10970c8b": {
+      "translation": "ज़िप एक्सपोर्ट",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "45799b060cd81ff6": {
+      "translation": "किसी भी निष्पादन को ज़िप फ़ाइल के रूप में एक्सपोर्ट करें, जिसमें निम्नलिखित शामिल होंगे:\n- `run-info.json` — सभी मेटाडेटा (तर्क, पर्यावरण, समय, उपयोग किया गया प्रोफाइल)\n- `stdout.txt` / `stderr.txt` — पूर्ण आउटपुट\n- `events.jsonl` — मशीन-पठनीय इवेंट स्ट्रीम\n- `artifacts/` — एकत्र किए गए सभी डेटा",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "fc86651b035163e7": {
+      "translation": "तकनीकी जानकारी",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "0557be0979a72329": {
+      "translation": "- **.NET MAUI** — क्रॉस-प्लेटफ़ॉर्म डेस्कटॉप यूआई (विंडोज पर केंद्रित)\n- **SQLite (WAL मोड)** — स्थानीय डेटा संग्रहण\n- **CommunityToolkit.Mvvm** — सोर्स जेनरेटर के साथ MVVM",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "b13558a9060b5f80": {
+      "translation": "शुरुआत कैसे करें",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "0bcf8688c5bc5719": {
+      "translation": "आवश्यकताएं",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "e30cc74440abd9d9": {
+      "translation": "- .NET 10 SDK\n- विंडोज 10/11",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "035cea0ee41468e0": {
+      "translation": "बिल्ड करें",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "2b981dab71631d37": {
+      "translation": "चलाएं",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "d2353cadd82e82b6": {
+      "translation": "परियोजना संरचना",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "cfbc372f8058f151": {
+      "translation": "लाइसेंस",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "40921e72cbf95d29": {
+      "translation": "MIT — देखें [LICENSE](LICENSE)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "4e8133210bd702a6": {
+      "translation": "योगदान",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "da37275412682157": {
+      "translation": "योगदान का स्वागत है! कृपया प्रस्तावित परिवर्तनों पर चर्चा करने के लिए पहले एक मुद्दा खोलें।",
+      "model": "translategemma:12b",
+      "timestamp": 1772083417371
+    },
+    "c6db4750595d58f3": {
+      "translation": "**Un'applicazione desktop \"local-first\" per la gestione e l'esecuzione di script, server e attività, con piena visibilità e tracciabilità.**",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "375b10382ba0eaac": {
+      "translation": "Cos'è Control Room?",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "3a692745754d4cbc": {
+      "translation": "Control Room trasforma i tuoi script in operazioni osservabili e ripetibili. Invece di eseguire `python train.py --config=prod` in un terminale e sperare nel meglio, ottieni:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "3c37ab36c40da0dc": {
+      "translation": "- **Esecuzioni con dati affidabili** — Ogni esecuzione viene registrata con output standard/errori standard, codici di uscita, tempi di esecuzione e artefatti.\n- **Identificazione degli errori** — Gli errori ricorrenti vengono raggruppati e tracciati in tutte le esecuzioni.\n- **Profili** — Definisci combinazioni predefinite di argomenti/ambiente (Smoke, Full, Debug) per ogni script.\n- **Palette dei comandi** — Esecuzione tramite tastiera con ricerca fuzzy.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "bd2eda68a403934d": {
+      "translation": "Funzionalità",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "2f299e345a15d583": {
+      "translation": "Profili (Nuovo!)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "6360f0567cf48043": {
+      "translation": "Definisci più configurazioni di esecuzione per ogni script:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "ece6959344242682": {
+      "translation": "La palette dei comandi mostra ogni profilo come un'azione separata. Riavviare un'esecuzione fallita utilizza lo stesso profilo che ha causato l'errore.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "48e0ab7c50151292": {
+      "translation": "Gruppi di errori",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "aaa546c69df254bf": {
+      "translation": "Gli errori vengono identificati in base alla loro \"impronta\". La pagina \"Errori\" mostra i problemi ricorrenti raggruppati per \"impronta\", con il numero di occorrenze e i timestamp di prima/ultima occorrenza.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "7a666bf33267e6c2": {
+      "translation": "Cronologia",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "8d6c93c58d55f19e": {
+      "translation": "Visualizza tutte le esecuzioni in ordine cronologico. Filtra per \"impronta\" dell'errore per vedere tutte le occorrenze di un errore specifico.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "7e4e916f6ad06943": {
+      "translation": "Esportazione ZIP",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "e15b3f4d62fa29f5": {
+      "translation": "Esporta qualsiasi esecuzione come file ZIP contenente:\n- `run-info.json` — Metadati completi (argomenti, ambiente, tempi di esecuzione, profilo utilizzato).\n- `stdout.txt` / `stderr.txt` — Output completo.\n- `events.jsonl` — Flusso di eventi leggibile dalle macchine.\n- `artifacts/` — Eventuali artefatti raccolti.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "4838acafe9b34d5d": {
+      "translation": "Tecnologie utilizzate",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "af3d44d14d5052b1": {
+      "translation": "- **.NET MAUI** — Interfaccia utente desktop multipiattaforma (con focus su Windows).\n- **SQLite (modalità WAL)** — Persistenza \"local-first\".\n- **CommunityToolkit.Mvvm** — MVVM con generatori di codice.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "a9756157a4249068": {
+      "translation": "Come iniziare",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "3e5f69f44cfdfdb0": {
+      "translation": "Prerequisiti",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "8ef844df58d6b876": {
+      "translation": "- .NET 10 SDK\n- Windows 10/11",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "2f40127ec851aec2": {
+      "translation": "Compilazione",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "cf18f33b7f8d8776": {
+      "translation": "Esecuzione",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "b114cb04f77862a6": {
+      "translation": "Struttura del progetto",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "0870aa1dcfea97cc": {
+      "translation": "Licenza",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "500dd5d4c92df651": {
+      "translation": "MIT — vedi [LICENSE](LICENSE)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "137a2378c67aaccf": {
+      "translation": "Contributi",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "8d2fc31415fc54d7": {
+      "translation": "I contributi sono benvenuti! Apri prima un problema per discutere le modifiche proposte.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083435980
+    },
+    "6dc83ed3ede424f0": {
+      "translation": "**Um aplicativo de desktop, com foco na experiência local, para gerenciar e executar scripts, servidores e tarefas, com total visibilidade.**",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "2fd8d908ceadb256": {
+      "translation": "O que é o Control Room?",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "bd9c6d1a0c39a985": {
+      "translation": "O Control Room transforma seus scripts em operações observáveis e repetíveis. Em vez de executar `python train.py --config=prod` em um terminal e torcer para que tudo dê certo, você obtém:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "7ebd102dbdcc3c6a": {
+      "translation": "- **Execuções com informações detalhadas** — Cada execução é registrada com saída padrão/erro padrão, códigos de saída, tempo de execução e arquivos.\n- **Identificação de falhas** — Erros recorrentes são agrupados e rastreados em todas as execuções.\n- **Perfis** — Defina combinações predefinidas de argumentos/ambiente (Teste rápido, Completo, Depuração) para cada script.\n- **Paleta de comandos** — Execução via teclado com pesquisa aproximada.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "6fbe4c0ef1edf268": {
+      "translation": "Recursos",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "84bf6b6f90ad7d35": {
+      "translation": "Perfis (Novo!)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "ad64923b3ad83ff5": {
+      "translation": "Defina múltiplas configurações de execução para cada script:",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "b47c854f33ac35e0": {
+      "translation": "A paleta de comandos mostra cada perfil como uma ação separada. Tentar novamente uma execução com falha usa o mesmo perfil que falhou.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "191ce06cdc96291d": {
+      "translation": "Grupos de Falhas",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "ae4f3a819cbd6182": {
+      "translation": "As falhas são identificadas por uma assinatura de erro. A página de Falhas mostra problemas recorrentes agrupados por essa assinatura, com a contagem de ocorrências e os carimbos de data/hora da primeira e última ocorrência.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "6e4c27c27958a886": {
+      "translation": "Linha do Tempo",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "55096a745185daef": {
+      "translation": "Visualize todas as execuções em ordem cronológica. Filtre por assinatura de falha para ver todas as ocorrências de um erro específico.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "0b021b04c3e0d889": {
+      "translation": "Exportação em ZIP",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "2bbec791d61203c6": {
+      "translation": "Exporte qualquer execução como um arquivo ZIP contendo:\n- `run-info.json` — Metadados completos (argumentos, ambiente, tempo de execução, perfil usado).\n- `stdout.txt` / `stderr.txt` — Saída completa.\n- `events.jsonl` — Fluxo de eventos legível por máquina.\n- `artifacts/` — Quaisquer arquivos coletados.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "e329adcc6d0f6d16": {
+      "translation": "Tecnologias Utilizadas",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "40a21c670ab2354c": {
+      "translation": "- **.NET MAUI** — Interface de usuário de desktop multiplataforma (foco em Windows).\n- **SQLite (modo WAL)** — Persistência com foco na experiência local.\n- **CommunityToolkit.Mvvm** — MVVM com geradores de código.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "df767b7abab9c9fe": {
+      "translation": "Como Começar",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "b0b778d66fad6c3e": {
+      "translation": "Pré-requisitos",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "f8e04e787b95897f": {
+      "translation": "- SDK .NET 10\n- Windows 10/11",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "bae2e4f72e601ac9": {
+      "translation": "Construção",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "74f019f9580a5840": {
+      "translation": "Execução",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "0f52ed7837bd1cc9": {
+      "translation": "Estrutura do Projeto",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "2aca9b0e72841008": {
+      "translation": "Licença",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "677a0951ca8cb842": {
+      "translation": "MIT — veja [LICENSE](LICENSE)",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "f6c8880997fa829d": {
+      "translation": "Contribuições",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    },
+    "4054766b0c307336": {
+      "translation": "Contribuições são bem-vindas! Por favor, abra um problema primeiro para discutir as alterações propostas.",
+      "model": "translategemma:12b",
+      "timestamp": 1772083453919
+    }
+  }
+}
